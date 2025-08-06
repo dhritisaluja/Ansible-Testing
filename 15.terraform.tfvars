@@ -12,8 +12,8 @@ instance_type = {
   production  = "t2.small"
 }
 amis = {
-  us-east-1 = "ami-0149b2da6ceec4bb0" # Canonical, Ubuntu, 20.04 LTS, amd64 focal image
-  us-east-2 = "ami-0430580de6244e02e" # Canonical, Ubuntu, 20.04 LTS, amd64 focal image
+  us-east-1 = "ami-020cba7c55df1f615" # Canonical, Ubuntu, 24.04 LTS, amd64 focal image
+  us-east-2 = "ami-0d1b5a8c13042c939" # Canonical, Ubuntu, 24.04 LTS, amd64 focal image
 }
 projid    = "PHOENIX-123"
-imagename = "ami-0149b2da6ceec4bb0"
+imagename = "ami-020cba7c55df1f615"
