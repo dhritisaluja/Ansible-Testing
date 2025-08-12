@@ -1,6 +1,7 @@
 ---
 - name: Install Redis Server
   hosts: testserver01
+  gather_facts: yes
   become: true
   tasks:
     - name: Install Redis dependencies
