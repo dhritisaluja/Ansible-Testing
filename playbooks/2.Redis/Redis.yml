@@ -7,7 +7,7 @@
       apt:
         name: "{{ item }}"
         state: present
-      loop:
+      loop: 
         - build-essential
         - tcl
       when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24.04'
