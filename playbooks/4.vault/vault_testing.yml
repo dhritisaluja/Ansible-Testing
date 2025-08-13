@@ -16,12 +16,12 @@
       3136
 
   tasks:
-    - name: Create .aws folder
+    - name: Create .aws folder 
       shell: mkdir -p /root/.aws
       ignore_errors: yes
-    - name: Copy Encrypted File To /tmp
+    - name: Copy Encrypted File To /tmp #copy the 3 encrypted files from Ansible Controller to the remote servers
       copy:
-        src: /tmp/{{item}} #This Encrypted File Must Be Created Prior To Running The Playbook.
+        src: /tmp/{{item}} #These Encrypted File Must Be Created Prior To Running The Playbook. 
         dest: /tmp/{{item}}
         owner: root
         group: root
@@ -49,7 +49,7 @@
     - name: Print VPC ID
       debug:
         var: vpcs
-    - name: Creating admin "{{item}}"
+    - name: Creating admin "{{item}}" #Creating Users with an Encrypted Password
       user:
         name: "{{item}}"
         state: present
@@ -57,7 +57,8 @@
         groups: root
         shell: /bin/bash
         group: sudo
-        password: "{{ '%s' | format(user_password) | regex_replace('\n', '') | password_hash('sha512') }}"
+        # Here, Is Ansible be able to decrypt user_password with the help of /root/vaultpass file?
+        password: "{{ '%s' | format(user_password) | regex_replace('\n', '') | password_hash('sha512') }}" 
         password_expire_min: 1
       with_items:
         - Avinash
