@@ -6,6 +6,7 @@
   become_user: root
   serial: 3
   vars:
+    ansible_python_interpreter: "/usr/bin/python3.12"
     user_password: !vault |
       $ANSIBLE_VAULT;1.1;AES256
       35356634396562333432396264663566663864343461643862363837336138383837623262306334
@@ -74,14 +75,14 @@
         name:
           - boto3
           - botocore
-        executable: "{{ ansible_pip_path }}"
+        executable: pip3
         extra_args: "--break-system-packages"
         state: present
 
     - name: Install passlib in the same Python environment Ansible uses
       pip:
         name: passlib
-        executable: "{{ ansible_pip_path }}"
+        executable: pip3
         extra_args: "--break-system-packages"
         state: present
 
