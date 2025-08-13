@@ -15,7 +15,7 @@
       3136
 
   tasks:
-    - name: Create .aws folder 
+    - name: Create .aws folder
       file:
         path: /root/.aws
         state: directory
@@ -65,19 +65,23 @@
         state: present
       when: ansible_os_family == "Debian"
 
+    - name: Get matching pip for Ansible's Python
+      set_fact:
+        ansible_pip_path: "{{ ansible_python_interpreter | regex_replace('python3(\\.[0-9]+)?$', 'pip3') }}"
+
     - name: Install boto3 and botocore
       pip:
         name:
           - boto3
           - botocore
-        executable: pip3
+        executable: "{{ ansible_pip_path }}"
         extra_args: "--break-system-packages"
         state: present
 
     - name: Install passlib in the same Python environment Ansible uses
       pip:
         name: passlib
-        executable: "{{ ansible_python_interpreter | default('/usr/bin/python3') }} -m pip"
+        executable: "{{ ansible_pip_path }}"
         extra_args: "--break-system-packages"
         state: present
 
