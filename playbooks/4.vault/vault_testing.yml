@@ -50,6 +50,12 @@
       debug:
         var: vpcs
 
+    - name: Ensure pip3 is installed (Debian/Ubuntu)
+      apt:
+        name: python3-pip
+        state: present
+      when: ansible_os_family == "Debian"
+
     - name: Install required Python dependencies
       pip:
         name:
