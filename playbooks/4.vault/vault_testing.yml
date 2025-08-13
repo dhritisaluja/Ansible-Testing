@@ -49,6 +49,15 @@
     - name: Print VPC ID
       debug:
         var: vpcs
+
+    - name: Install required Python dependencies
+      pip:
+        name:
+          - boto3
+          - botocore
+          - passlib
+        state: present
+
     - name: Creating admin "{{item}}" #Creating Users with an Encrypted Password
       user:
         name: "{{item}}"
