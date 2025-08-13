@@ -56,13 +56,15 @@
         state: present
       when: ansible_os_family == "Debian"
 
-    - name: Install required Python dependencies
+    - name: Install required Python dependencies with system-wide override
       pip:
         name:
           - boto3
           - botocore
           - passlib
+        extra_args: "--break-system-packages"
         state: present
+
 
     - name: Creating admin "{{item}}" #Creating Users with an Encrypted Password
       user:
