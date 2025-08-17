@@ -1,3 +1,4 @@
+#ansible-playbook -i invfile Playbooks/vault_testing.yml -vv --ask-vault-pass
 ---
 - name: Run AWS Cli Commands On All Servers
   hosts: pvt
@@ -13,7 +14,6 @@
       39366339633765366437373533653763653666663761323437626532646266303062363939336634
       3933376235396131360a373437666436306333613436303861373230373331636539383533303538
       3136
-    hashed_password: "{{ user_password | password_hash('sha512') }}"
 
   tasks:
     - name: Create .aws folder
@@ -65,7 +65,6 @@
         name: passlib
         executable: pip3
         state: present
-      when: hashed_password is not defined
 
     - name: Creating admin "{{item}}"
       user:
@@ -75,7 +74,7 @@
         groups: root
         shell: /bin/bash
         group: sudo
-        password: "{{ hashed_password }}"
+        password: "{{ '%s' | format(user_password) | regex_replace('\n', '') | password_hash('sha512') }}"
         password_expire_min: 1
       with_items:
         - Avinash

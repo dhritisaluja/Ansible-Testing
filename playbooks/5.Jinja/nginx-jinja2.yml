@@ -1,15 +1,16 @@
+#This playbook automates the deployment of a web page on Nginx servers using templates for dynamic content.
 ---
 - name: Play for Install Nginx on WebServers
   hosts: pvt
-  gather_facts: yes
-  become: yes
-  become_user: root
+  gather_facts: yes              # Gathers system information (facts) from target hosts
+  become: yes                    # Executes tasks with elevated privileges (e.g., sudo)
+  become_user: root              # Specifies the user to become (root)
   vars:
     #Static Variables
     custom_heading: "Welcome To DevSecOps By Saikiran Pinapathruni"
     custom_para: "We Are Studying Ansible Templates Practically..!!!"
     aws_account: "211125710812"
-    # #Dynamic variables from Ansible Facts
+    #Dynamic variables are values derived from Ansible Facts. These are populated at runtime from the target hosts.
     todays_date: "{{ ansible_facts['date_time']['date'] }}"
     # host_name: "{{ ansible_facts['hostname'] }}"
     # fqdn_name: "{{ ansible_facts['fqdn'] }}"
@@ -29,12 +30,14 @@
       tags:
         - install
     - name: Copy the index.j2 Template to index destination folder.
-      template: >
-        src=/root/Ansible-Testing/playbooks/5.Jinja/index.j2
-        dest=/var/www/html/index.nginx-debian.html
+      # This module processes a Jinja2 template.
+      template:                                                   
+        # src = The source template file on the controller, dest = The destination for the rendered file on the client
+        src=/root/Ansible-Testing/playbooks/5.Jinja/index.j2                                                                                                                
+        dest=/var/www/html/index.nginx-debian.html                
         owner=root
         group=root
-        mode=0644
+        mode='0644'
       notify: Restart Nginx
       tags:
         - j2

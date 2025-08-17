@@ -5,6 +5,9 @@
   become: yes
   become_user: root
   vars:
+    # --- MySQL Configuration Variables ---
+    # These variables are used to populate the mysql_conf.j2 template.
+    # They control the behavior and performance of the MySQL server.
     mysql_socket: /var/lib/mysql/mysql.sock
     mysql_port: 3306
     mysql_data_dir: /var/lib/mysql
@@ -19,33 +22,33 @@
     mysql_max_connections: 682
     mysql_thread_cache_size: 102
     mysql_binding_address: "0.0.0.0"
-    hostname: "{{ inventory_hostname }}"
+    hostname: "{{ inventory_hostname }}"               # Ansible special variable for the host's name
   tasks:
     - name: Installing Mysql and Dependencies
-      package:
+      package:                                         # Using the 'package' module for cross-platform compatibility
         name: "{{item}}"
         state: present
         update_cache: yes
-      loop:
+      loop:                                            # Iterates through a list of packages to install
         - mysql-server
         - mysql-client
-        - python3-mysqldb
+        - python3-mysqldb                              # CRITICAL: Python library for Ansible's mysql_* modules
         - libmysqlclient-dev
       become: yes
-    - name: Copy the index.j2 Template to index destination folder.
+    - name: Copy the mysql_conf.j2 Template to destination folder.
       template: >
         src=/root/Ansible-Testing/playbooks/5.Jinja/mysql_conf.j2
-        dest=/etc/mysql/mysql.conf.d/mysqld.cnf
+        dest=/etc/mysql/mysql.conf.d/mysqld.cnf                        
         owner=root
         group=root
         mode=0644
     - name: start and enable mysql service
-      service:
+      service: # Manages system services
         name: mysql
-        state: started
-        enabled: yes
+        state: started # Ensures the service is running
+        enabled: yes   # Ensures the service starts on boot. 
     - name: create a new database
-      mysql_db: >
+      mysql_db: >  # Module specifically for managing MySQL databases
         name=myflixdb 
         state=present 
         login_user=root
